@@ -1,0 +1,24 @@
+{
+  "name": "it-management-dashboard",
+  "version": "1.0.0",
+  "description": "IT Management Dashboard with auto-save functionality",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "it-management",
+    "dashboard",
+    "inventory"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

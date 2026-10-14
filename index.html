@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Management Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-laptop"></i>
+                <span>IT Management</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link active" data-view="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="#" class="nav-link" data-view="inventory">
+                    <i class="fas fa-list"></i> Inventory
+                </a>
+                <a href="#" class="nav-link" data-view="analytics">
+                    <i class="fas fa-chart-pie"></i> Analytics
+                </a>
+                <a href="#" class="nav-link" data-view="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="exportBtn" title="Export Data">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="btn-icon" id="importBtn" title="Import Data">
+                    <i class="fas fa-upload"></i>
+                </button>
+                <input type="file" id="fileInput" accept=".csv" style="display: none;">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by Host Name, User, Model, SSD, RAM, or Date...">
+            <button class="clear-search" id="clearSearch" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="search-info" id="searchInfo"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard View -->
+        <div class="view-container active" id="dashboardView">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalPCs">0</div>
+                        <div class="stat-label">Total PCs</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalEmployees">0</div>
+                        <div class="stat-label">Employees</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-hdd"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="avgStorage">0 GB</div>
+                        <div class="stat-label">Avg Storage</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-memory"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="avgRAM">0 GB</div>
+                        <div class="stat-label">Avg RAM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="action-buttons">
+                    <button class="action-btn" id="addNewBtn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Add New PC</span>
+                    </button>
+                    <button class="action-btn" id="viewInventoryBtn">
+                        <i class="fas fa-list"></i>
+                        <span>View Inventory</span>
+                    </button>
+                    <button class="action-btn" id="generateReportBtn">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Generate Report</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-section">
+                <h2 class="section-title">Recent Additions</h2>
+                <div id="recentActivity" class="recent-list"></div>
+            </div>
+        </div>
+
+        <!-- Inventory View -->
+        <div class="view-container" id="inventoryView">
+            <div class="inventory-header">
+                <h2 class="section-title">PC Inventory Management</h2>
+                <button class="btn-primary" id="addRowBtn">
+                    <i class="fas fa-plus"></i> Add New Entry
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Sr No</th>
+                            <th>Host Name</th>
+                            <th>User Name</th>
+                            <th>Model</th>
+                            <th>SSD</th>
+                            <th>RAM</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analytics View -->
+        <div class="view-container" id="analyticsView">
+            <h2 class="section-title">Analytics & Reports</h2>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Model Distribution</h3>
+                    <div id="modelDistribution" class="chart-container"></div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Storage Analysis</h3>
+                    <div id="storageAnalysis" class="chart-container"></div>
+                </div>
+                <div class="analytics-card">
+                    <h3>RAM Distribution</h3>
+                    <div id="ramDistribution" class="chart-container"></div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Monthly Additions</h3>
+                    <div id="monthlyAdditions" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div class="view-container" id="settingsView">
+            <h2 class="section-title">Settings</h2>
+            <div class="settings-content">
+                <div class="settings-section">
+                    <h3>Data Management</h3>
+                    <div class="settings-item">
+                        <label>Auto-save changes</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoSave" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <label>Highlight search results</label>
+                        <label class="switch">
+                            <input type="checkbox" id="highlightSearch" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Display Options</h3>
+                    <div class="settings-item">
+                        <label>Rows per page</label>
+                        <select id="rowsPerPage" class="settings-select">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100" selected>100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Modal for Edit/Add -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Edit Entry</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editIndex">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Sr No</label>
+                            <input type="number" id="editSrNo" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Host Name</label>
+                            <input type="text" id="editHostName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>User Name</label>
+                            <input type="text" id="editUserName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Model</label>
+                            <input type="text" id="editModel" required>
+                        </div>
+                        <div class="form-group">
+                            <label>SSD</label>
+                            <select id="editSSD" required>
+                                <option value="256 GB">256 GB</option>
+                                <option value="512 GB">512 GB</option>
+                                <option value="1 TB">1 TB</option>
+                                <option value="2 TB">2 TB</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>RAM</label>
+                            <select id="editRAM" required>
+                                <option value="8 GB">8 GB</option>
+                                <option value="16 GB">16 GB</option>
+                                <option value="32 GB">32 GB</option>
+                                <option value="64 GB">64 GB</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="editDate" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
